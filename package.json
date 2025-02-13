@@ -1,0 +1,38 @@
+{
+  "name": "jeulog-user-ms",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fanecoinc/jeulog-user-ms.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/fanecoinc/jeulog-user-ms/issues"
+  },
+  "homepage": "https://github.com/fanecoinc/jeulog-user-ms#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.9",
+    "prettier": "3.5.1",
+    "@types/node": "^22.13.1"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "moleculer": "^0.14.35",
+    "nats": "^2.29.1",
+    "sucrase": "^3.35.0",
+    "tsconfig-paths": "^4.2.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "prisma": "^6.3.1"
+  }
+}
