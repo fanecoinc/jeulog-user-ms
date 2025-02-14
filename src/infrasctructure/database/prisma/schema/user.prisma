@@ -1,0 +1,11 @@
+model User {
+    id          String           @id
+    email       String           @unique
+    fullName    String
+    password    String
+    active      Boolean          @default(true)
+    createdAt   DateTime
+    permissions UserPermission[]
+    updatedAt   DateTime?
+    deletedAt   DateTime?
+}

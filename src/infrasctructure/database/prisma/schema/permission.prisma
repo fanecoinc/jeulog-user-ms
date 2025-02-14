@@ -1,0 +1,28 @@
+model Permission {
+    id        String           @id
+    code      String           @unique
+    name      String           @unique
+    users     UserPermission[]
+    roles     RolePermission[]
+    createdAt DateTime
+    updatedAt DateTime?
+    deletedAt DateTime?
+}
+
+model UserPermission {
+    userId       String
+    permissionId String
+    permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+    user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@id([userId, permissionId])
+}
+
+model RolePermission {
+    roleId       String
+    permissionId String
+    permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+    role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+    @@id([roleId, permissionId])
+}
