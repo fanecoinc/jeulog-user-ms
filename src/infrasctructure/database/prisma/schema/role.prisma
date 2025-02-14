@@ -3,6 +3,7 @@ model Role {
     name        String           @unique
     permissions RolePermission[]
     createdAt   DateTime
+    users       User[]
     updatedAt   DateTime?
     deletedAt   DateTime?
 }

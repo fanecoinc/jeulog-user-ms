@@ -3,7 +3,6 @@ import {
   PermissionResponseDTO,
   toPermissionResponseDTO,
 } from '../dtos/Permission.dto';
-import { Permission } from '@/domain/entities/Permission';
 
 export class PermissionUseCase {
   constructor(private readonly permissionRepository: IPermissionRepository) {}

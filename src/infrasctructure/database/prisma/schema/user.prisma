@@ -6,6 +6,8 @@ model User {
     active      Boolean          @default(true)
     createdAt   DateTime
     permissions UserPermission[]
+    roleId      String
+    role        Role             @relation(fields: [roleId], references: [id])
     updatedAt   DateTime?
     deletedAt   DateTime?
 }
