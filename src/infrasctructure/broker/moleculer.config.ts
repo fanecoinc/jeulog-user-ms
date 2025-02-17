@@ -1,3 +1,4 @@
+import { errorHandler } from './errorHandler';
 import { BrokerOptions } from 'moleculer';
 
 const brokerOptions: BrokerOptions = {
@@ -10,6 +11,8 @@ const brokerOptions: BrokerOptions = {
     retries: 3,
     delay: 2000,
   },
+  cacher: 'Memory',
+  errorHandler,
 };
 
 export default brokerOptions;
