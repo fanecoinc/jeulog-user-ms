@@ -8,14 +8,17 @@ import { IRoleRepository } from '@/domain/ports/Role.repository';
 import { IPermissionRepository } from '@/domain/ports/Permission.repository';
 
 export class RoleService {
+  private roleUseCase: RoleUseCase;
+
   constructor(
     private roleRepository: IRoleRepository,
-    private permissionRepository: IPermissionRepository,
-    private roleUseCase: RoleUseCase = new RoleUseCase(
+    private permissionRepository: IPermissionRepository
+  ) {
+    this.roleUseCase = new RoleUseCase(
       this.roleRepository,
       this.permissionRepository
-    )
-  ) {}
+    );
+  }
 
   async getAllRoles(): Promise<RoleResponseDTO[]> {
     return await this.roleUseCase.getAllRoles();

@@ -9,16 +9,19 @@ import { IPermissionRepository } from '@/domain/ports/Permission.repository';
 import { IRoleRepository } from '@/domain/ports/Role.repository';
 
 export class UserService {
+  private userUseCase: UserUseCase;
+
   constructor(
     private UserRepository: IUserRepository,
     private permissionRepository: IPermissionRepository,
-    private roleRepository: IRoleRepository,
-    private userUseCase: UserUseCase = new UserUseCase(
+    private roleRepository: IRoleRepository
+  ) {
+    this.userUseCase = new UserUseCase(
       this.UserRepository,
       this.permissionRepository,
       this.roleRepository
-    )
-  ) {}
+    );
+  }
 
   async getAllUsers(): Promise<UserResponseDTO[]> {
     return await this.userUseCase.getAllUsers();
