@@ -1,7 +1,7 @@
 import { BrokerOptions } from 'moleculer';
 
 const brokerOptions: BrokerOptions = {
-  nodeID: 'products-service-node',
+  nodeID: 'user-service-node',
   transporter: 'NATS',
   logLevel: 'info',
   requestTimeout: 5000,
