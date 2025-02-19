@@ -90,7 +90,6 @@ const actions = {
       roleEditSchema.parse(dto);
       return await roleService.editRole(id, dto);
     } catch (e) {
-      console.log(e);
       errorHandler(e as Error);
     }
   },
