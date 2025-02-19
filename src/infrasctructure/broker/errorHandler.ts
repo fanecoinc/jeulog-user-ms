@@ -56,6 +56,10 @@ export function errorHandler(err: Error): never {
     );
   }
 
+  if (err instanceof Errors.MoleculerClientError) {
+    throw err;
+  }
+
   throw new Errors.MoleculerServerError(
     'Erro desconhecido no servidor',
     500,

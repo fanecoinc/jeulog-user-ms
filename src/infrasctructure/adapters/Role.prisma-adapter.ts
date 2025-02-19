@@ -109,28 +109,38 @@ export class PrismaRoleRepository implements IRoleRepository {
   }
 
   async update(id: string, role: Partial<Role>): Promise<Role> {
-    const updatedRole = await prismaClient.role.update({
-      where: { id },
-      data: {
-        ...role,
-        updatedAt: new Date(),
-        permissions: role.permissions
-          ? {
-              set: [],
-              create: role.permissions.map((p) => ({
-                permission: { connect: { id: p.id } },
-              })),
-            }
-          : undefined,
-      },
-      include: {
-        permissions: {
-          include: {
-            permission: true,
+    const [_roleAfterReset, updatedRole] = await prismaClient.$transaction([
+      prismaClient.role.update({
+        where: { id },
+        data: {
+          permissions: {
+            deleteMany: {},
           },
         },
-      },
-    });
+      }),
+
+      prismaClient.role.update({
+        where: { id },
+        data: {
+          ...role,
+          updatedAt: new Date(),
+          permissions: role.permissions
+            ? {
+                create: role.permissions.map((p) => ({
+                  permission: { connect: { id: p.id } },
+                })),
+              }
+            : undefined,
+        },
+        include: {
+          permissions: {
+            include: {
+              permission: true,
+            },
+          },
+        },
+      }),
+    ]);
 
     return new Role(
       updatedRole.id,

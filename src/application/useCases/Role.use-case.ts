@@ -62,8 +62,9 @@ export class RoleUseCase {
         )
       : undefined;
 
+    const { permissionIds, ...rest } = dto;
     const updatedRole = await this.roleRepository.update(role.id, {
-      ...dto,
+      ...rest,
       permissions,
       updatedAt: new Date(),
     });

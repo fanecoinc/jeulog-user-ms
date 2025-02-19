@@ -27,26 +27,42 @@ const userService = new UserService(
 const actions = {
   // Permissions
   async getPermissions(_ctx: Context) {
-    return await permissionService.getAllPermissions();
+    try {
+      return await permissionService.getAllPermissions();
+    } catch (e) {
+      errorHandler(e as Error);
+    }
   },
 
   async getPermissionById(
     ctx: Context<StandardParameter<PermissionResponseDTO>>
   ) {
-    const { id } = ctx.params;
-    uuidSchema.parse(id);
-    return await permissionService.getPermissionById(id);
+    try {
+      const { id } = ctx.params;
+      uuidSchema.parse(id);
+      return await permissionService.getPermissionById(id);
+    } catch (e) {
+      errorHandler(e as Error);
+    }
   },
 
   // Roles
   async getRoles(_ctx: Context) {
-    return await roleService.getAllRoles();
+    try {
+      return await roleService.getAllRoles();
+    } catch (e) {
+      errorHandler(e as Error);
+    }
   },
 
   async getRoleById(ctx: Context<StandardParameter<CreateRoleDTO>>) {
-    const { id } = ctx.params;
-    uuidSchema.parse(id);
-    return await roleService.getRoleById(id);
+    try {
+      const { id } = ctx.params;
+      uuidSchema.parse(id);
+      return await roleService.getRoleById(id);
+    } catch (e) {
+      errorHandler(e as Error);
+    }
   },
 
   async createRole(ctx: Context<StandardParameter<CreateRoleDTO>>) {
@@ -59,42 +75,63 @@ const actions = {
       roleCreationSchema.parse(dto);
       return await roleService.createRole(dto);
     } catch (e) {
-      return errorHandler(e as Error);
+      errorHandler(e as Error);
     }
   },
 
   async editRole(ctx: Context<StandardParameter<CreateRoleDTO>>) {
-    const { name, permissionIds, id } = ctx.params;
-    uuidSchema.parse(id);
-    const dto = {
-      name,
-      permissionIds,
-    };
-    roleEditSchema.parse(dto);
-    return await roleService.editRole(id, dto);
+    try {
+      const { name, permissionIds, id } = ctx.params;
+      uuidSchema.parse(id);
+      const dto = {
+        name,
+        permissionIds,
+      };
+      roleEditSchema.parse(dto);
+      return await roleService.editRole(id, dto);
+    } catch (e) {
+      console.log(e);
+      errorHandler(e as Error);
+    }
   },
 
   // Users
   async getUsers(_ctx: Context) {
-    return await userService.getAllUsers();
+    try {
+      return await userService.getAllUsers();
+    } catch (e) {
+      errorHandler(e as Error);
+    }
   },
 
   async getUserById(ctx: Context<StandardParameter<CreateUserDTO>>) {
-    const { id } = ctx.params;
-    uuidSchema.parse(id);
-    return await userService.getUserById(id);
+    try {
+      const { id } = ctx.params;
+      uuidSchema.parse(id);
+      return await userService.getUserById(id);
+    } catch (e) {
+      errorHandler(e as Error);
+    }
   },
 
   async createUser(ctx: Context<StandardParameter<CreateUserDTO>>) {
-    const { id, ...dto } = ctx.params;
-    uuidSchema.parse(id);
-    return await userService.createUser(dto);
+    try {
+      const { id, ...dto } = ctx.params;
+      uuidSchema.parse(id);
+      return await userService.createUser(dto);
+    } catch (e) {
+      errorHandler(e as Error);
+    }
   },
 
   async editUser(ctx: Context<StandardParameter<CreateUserDTO>>) {
-    const { id, ...dto } = ctx.params;
-    uuidSchema.parse(id);
-    return await userService.editUser(id, dto);
+    try {
+      const { id, ...dto } = ctx.params;
+      uuidSchema.parse(id);
+      return await userService.editUser(id, dto);
+    } catch (e) {
+      errorHandler(e as Error);
+    }
   },
 };
 
