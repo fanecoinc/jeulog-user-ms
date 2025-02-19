@@ -1,5 +1,6 @@
 import { IRoleRepository } from '@/domain/ports/Role.repository';
 import { IPermissionRepository } from '@/domain/ports/Permission.repository';
+import { Errors } from 'moleculer';
 import {
   CreateRoleDTO,
   UpdateRoleDTO,
@@ -20,7 +21,11 @@ export class RoleUseCase {
       dto.permissionIds.map(async (id) => {
         const obj = await this.permissionRepository.findById(id);
         if (!obj) {
-          throw new Error('Permissão inexistente');
+          throw new Errors.MoleculerClientError(
+            'Registro não encontrado',
+            404,
+            'P2025'
+          );
         }
         return obj;
       })
@@ -34,14 +39,23 @@ export class RoleUseCase {
 
   async updateRole(id: string, dto: UpdateRoleDTO): Promise<RoleResponseDTO> {
     const role = await this.roleRepository.findById(id);
-    if (!role) throw new Error('Cargo não encontrado');
+    if (!role)
+      throw new Errors.MoleculerClientError(
+        'Registro não encontrado',
+        404,
+        'P2025'
+      );
 
     const permissions = dto.permissionIds
       ? await Promise.all(
           dto.permissionIds.map(async (id) => {
             const obj = await this.permissionRepository.findById(id);
             if (!obj) {
-              throw new Error('Permissão inexistente');
+              throw new Errors.MoleculerClientError(
+                'Registro não encontrado',
+                404,
+                'P2025'
+              );
             }
             return obj;
           })
@@ -59,7 +73,12 @@ export class RoleUseCase {
 
   async getRoleById(id: string): Promise<RoleResponseDTO> {
     const role = await this.roleRepository.findById(id);
-    if (!role) throw new Error('Cargo não encontrado');
+    if (!role)
+      throw new Errors.MoleculerClientError(
+        'Registro não encontrado',
+        404,
+        'P2025'
+      );
     return toRoleResponseDTO(role);
   }
 

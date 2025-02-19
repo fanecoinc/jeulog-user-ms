@@ -1,4 +1,5 @@
 import { IPermissionRepository } from '@/domain/ports/Permission.repository';
+import { Errors } from 'moleculer';
 import {
   PermissionResponseDTO,
   toPermissionResponseDTO,
@@ -14,7 +15,12 @@ export class PermissionUseCase {
 
   async getPermissionById(id: string): Promise<PermissionResponseDTO> {
     const permission = await this.permissionRepository.findById(id);
-    if (!permission) throw new Error('Permissão não encontrada');
+    if (!permission)
+      throw new Errors.MoleculerClientError(
+        'Registro não encontrado',
+        404,
+        'P2025'
+      );
     return toPermissionResponseDTO(permission);
   }
 }

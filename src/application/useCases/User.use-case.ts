@@ -9,6 +9,7 @@ import {
 } from '../dtos/User.dto';
 import { User } from '@/domain/entities/User';
 import { v4 as uuidv4 } from 'uuid';
+import { Errors } from 'moleculer';
 
 export class UserUseCase {
   constructor(
@@ -22,7 +23,11 @@ export class UserUseCase {
       dto.permissionIds.map(async (id) => {
         const obj = await this.permissionRepository.findById(id);
         if (!obj) {
-          throw new Error('Permissão inexistente');
+          throw new Errors.MoleculerClientError(
+            'Registro não encontrado',
+            404,
+            'P2025'
+          );
         }
         return obj;
       })
@@ -30,7 +35,11 @@ export class UserUseCase {
 
     const role = await this.roleRepository.findById(dto.roleId);
     if (!role) {
-      throw new Error('Cargo inexistente');
+      throw new Errors.MoleculerClientError(
+        'Registro não encontrado',
+        404,
+        'P2025'
+      );
     }
 
     const user = new User(
@@ -51,14 +60,23 @@ export class UserUseCase {
 
   async updateUser(id: string, dto: UpdateUserDTO): Promise<UserResponseDTO> {
     const user = await this.userRepository.findById(id);
-    if (!user) throw new Error('Usuário não encontrado');
+    if (!user)
+      throw new Errors.MoleculerClientError(
+        'Registro não encontrado',
+        404,
+        'P2025'
+      );
 
     const permissions = dto.permissionIds
       ? await Promise.all(
           dto.permissionIds.map(async (id) => {
             const obj = await this.permissionRepository.findById(id);
             if (!obj) {
-              throw new Error('Permissão inexistente');
+              throw new Errors.MoleculerClientError(
+                'Registro não encontrado',
+                404,
+                'P2025'
+              );
             }
             return obj;
           })
@@ -70,7 +88,11 @@ export class UserUseCase {
       : undefined;
 
     if (role === null) {
-      throw new Error('Cargo inexistente');
+      throw new Errors.MoleculerClientError(
+        'Registro não encontrado',
+        404,
+        'P2025'
+      );
     }
 
     const updatedUser = await this.userRepository.update(user.id, {
@@ -84,7 +106,12 @@ export class UserUseCase {
 
   async getUserById(id: string): Promise<UserResponseDTO> {
     const user = await this.userRepository.findById(id);
-    if (!user) throw new Error('Usuário não encontrado');
+    if (!user)
+      throw new Errors.MoleculerClientError(
+        'Registro não encontrado',
+        404,
+        'P2025'
+      );
     return toUserResponseDTO(user);
   }
 
