@@ -9,6 +9,9 @@ import { StandardParameter } from './parameters';
 import { CreateRoleDTO } from '@/application/dtos/Role.dto';
 import { CreateUserDTO } from '@/application/dtos/User.dto';
 import { PermissionResponseDTO } from '@/application/dtos/Permission.dto';
+import { errorHandler } from './errorHandler';
+import { uuidSchema } from '../schemas/Common.schema';
+import { roleCreationSchema, roleEditSchema } from '../schemas/Role.schema';
 
 const permissionRepository = new PrismaPermissionRepository();
 const roleRepository = new PrismaRoleRepository();
@@ -31,6 +34,7 @@ const actions = {
     ctx: Context<StandardParameter<PermissionResponseDTO>>
   ) {
     const { id } = ctx.params;
+    uuidSchema.parse(id);
     return await permissionService.getPermissionById(id);
   },
 
@@ -41,24 +45,32 @@ const actions = {
 
   async getRoleById(ctx: Context<StandardParameter<CreateRoleDTO>>) {
     const { id } = ctx.params;
+    uuidSchema.parse(id);
     return await roleService.getRoleById(id);
   },
 
   async createRole(ctx: Context<StandardParameter<CreateRoleDTO>>) {
-    const { name, permissionIds } = ctx.params;
-    const dto = {
-      name,
-      permissionIds,
-    };
-    return await roleService.createRole(dto);
+    try {
+      const { name, permissionIds } = ctx.params;
+      const dto = {
+        name,
+        permissionIds,
+      };
+      roleCreationSchema.parse(dto);
+      return await roleService.createRole(dto);
+    } catch (e) {
+      return errorHandler(e as Error);
+    }
   },
 
   async editRole(ctx: Context<StandardParameter<CreateRoleDTO>>) {
     const { name, permissionIds, id } = ctx.params;
+    uuidSchema.parse(id);
     const dto = {
       name,
       permissionIds,
     };
+    roleEditSchema.parse(dto);
     return await roleService.editRole(id, dto);
   },
 
@@ -69,16 +81,19 @@ const actions = {
 
   async getUserById(ctx: Context<StandardParameter<CreateUserDTO>>) {
     const { id } = ctx.params;
+    uuidSchema.parse(id);
     return await userService.getUserById(id);
   },
 
   async createUser(ctx: Context<StandardParameter<CreateUserDTO>>) {
     const { id, ...dto } = ctx.params;
+    uuidSchema.parse(id);
     return await userService.createUser(dto);
   },
 
   async editUser(ctx: Context<StandardParameter<CreateUserDTO>>) {
     const { id, ...dto } = ctx.params;
+    uuidSchema.parse(id);
     return await userService.editUser(id, dto);
   },
 };
