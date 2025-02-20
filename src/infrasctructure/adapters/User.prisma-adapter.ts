@@ -117,37 +117,43 @@ export class PrismaUserRepository implements IUserRepository {
   }
 
   async update(id: string, user: Partial<User>): Promise<User> {
-    const data: any = {
-      updatedAt: new Date(),
-    };
-
-    if (user.email) data.email = user.email;
-    if (user.fullName) data.fullName = user.fullName;
-    if (user.password) data.password = user.password;
-    if (user.active !== undefined) data.active = user.active;
-    if (user.roleId) data.roleId = user.roleId;
-
-    if (user.permissions) {
-      data.permissions = {
-        set: [],
-        create: user.permissions.map((p) => ({
-          permission: { connect: { id: p.id } },
-        })),
-      };
-    }
-
-    const updatedUser = await prismaClient.user.update({
-      where: { id },
-      data,
-      include: {
-        permissions: {
-          include: {
-            permission: true,
+    const [_userAfterReset, updatedUser] = await prismaClient.$transaction([
+      prismaClient.user.update({
+        where: { id },
+        data: {
+          permissions: {
+            deleteMany: {},
           },
         },
-        role: true,
-      },
-    });
+      }),
+
+      prismaClient.user.update({
+        where: { id },
+        data: {
+          email: user.email,
+          fullName: user.fullName,
+          password: user.password,
+          active: user.active,
+          roleId: user.roleId,
+          updatedAt: new Date(),
+          permissions: user.permissions
+            ? {
+                create: user.permissions.map((p) => ({
+                  permission: { connect: { id: p.id } },
+                })),
+              }
+            : undefined,
+        },
+        include: {
+          permissions: {
+            include: {
+              permission: true,
+            },
+          },
+          role: true,
+        },
+      }),
+    ]);
 
     return this.mapToUserEntity(updatedUser);
   }

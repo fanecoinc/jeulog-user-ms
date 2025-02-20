@@ -12,6 +12,11 @@ import { PermissionResponseDTO } from '@/application/dtos/Permission.dto';
 import { errorHandler } from './errorHandler';
 import { uuidSchema } from '../schemas/Common.schema';
 import { roleCreationSchema, roleEditSchema } from '../schemas/Role.schema';
+import {
+  userCreationSchema,
+  userEditSchema,
+  userResetPasswordSchema,
+} from '../schemas/User.schema';
 
 const permissionRepository = new PrismaPermissionRepository();
 const roleRepository = new PrismaRoleRepository();
@@ -115,9 +120,8 @@ const actions = {
 
   async createUser(ctx: Context<StandardParameter<CreateUserDTO>>) {
     try {
-      const { id, ...dto } = ctx.params;
-      uuidSchema.parse(id);
-      return await userService.createUser(dto);
+      userCreationSchema.parse(ctx.params);
+      return await userService.createUser(ctx.params);
     } catch (e) {
       errorHandler(e as Error);
     }
@@ -127,6 +131,18 @@ const actions = {
     try {
       const { id, ...dto } = ctx.params;
       uuidSchema.parse(id);
+      userEditSchema.parse(dto);
+      return await userService.editUser(id, dto);
+    } catch (e) {
+      errorHandler(e as Error);
+    }
+  },
+
+  async resetPassword(ctx: Context<StandardParameter<CreateUserDTO>>) {
+    try {
+      const { id, ...dto } = ctx.params;
+      uuidSchema.parse(id);
+      userResetPasswordSchema.parse(dto);
       return await userService.editUser(id, dto);
     } catch (e) {
       errorHandler(e as Error);

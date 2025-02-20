@@ -42,6 +42,12 @@ export class UserUseCase {
       );
     }
 
+    const allPermissions = [
+      ...new Map(
+        [...role.permissions, ...permissions].map((p) => [p.id, p])
+      ).values(),
+    ];
+
     const user = new User(
       uuidv4(),
       dto.email,
@@ -51,7 +57,7 @@ export class UserUseCase {
       new Date(),
       dto.roleId,
       role,
-      permissions
+      allPermissions
     );
 
     const createdUser = await this.userRepository.create(user);
@@ -81,13 +87,13 @@ export class UserUseCase {
             return obj;
           })
         )
-      : undefined;
+      : user.permissions;
 
     const role = dto.roleId
       ? await this.roleRepository.findById(dto.roleId)
-      : undefined;
+      : await this.roleRepository.findById(user.roleId);
 
-    if (role === null) {
+    if (!role) {
       throw new Errors.MoleculerClientError(
         'Registro não encontrado',
         404,
@@ -95,9 +101,15 @@ export class UserUseCase {
       );
     }
 
+    const allPermissions = [
+      ...new Map(
+        [...role.permissions, ...permissions].map((p) => [p.id, p])
+      ).values(),
+    ];
+
     const updatedUser = await this.userRepository.update(user.id, {
       ...dto,
-      permissions,
+      permissions: allPermissions,
       updatedAt: new Date(),
     });
 

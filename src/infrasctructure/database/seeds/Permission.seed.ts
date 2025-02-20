@@ -6,9 +6,9 @@ import { v4 as uuidv4 } from 'uuid';
 export async function permissionSeed(): Promise<void> {
   const permissions: Array<Record<string, string>> = Object.entries(
     Permissions
-  ).map(([name, code]) => ({
-    name,
+  ).map(([code, name]) => ({
     code,
+    name,
   }));
 
   permissions.forEach(async (obj) => {
