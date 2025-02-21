@@ -3,6 +3,9 @@ import { IUserRepository } from '@/domain/ports/User.repository';
 import { Permission } from '@/domain/entities/Permission';
 import { Role } from '@/domain/entities/Role';
 import { User } from '@/domain/entities/User';
+import bcrypt from 'bcrypt';
+import { JWT_SECRET } from '../database/config';
+import jwt from 'jsonwebtoken';
 
 export class PrismaUserRepository implements IUserRepository {
   private mapToUserEntity(instance: Record<string, any>): User {
@@ -156,5 +159,35 @@ export class PrismaUserRepository implements IUserRepository {
     ]);
 
     return this.mapToUserEntity(updatedUser);
+  }
+
+  async authenticate(
+    user: Partial<User>
+  ): Promise<Record<string, string | number> | null> {
+    const authUser = await prismaClient.user.findUnique({
+      where: { email: user.email },
+    });
+    if (!authUser) {
+      return null;
+    }
+
+    const validate = await bcrypt.compare(
+      user.password ?? '',
+      authUser.password
+    );
+
+    if (!validate) {
+      return null;
+    }
+
+    const { password, ...userData } = authUser;
+
+    const token = jwt.sign({ user: userData }, JWT_SECRET, { expiresIn: '5h' });
+
+    return {
+      message: 'authenticated!',
+      token: token,
+      expiresIn: 18000,
+    };
   }
 }

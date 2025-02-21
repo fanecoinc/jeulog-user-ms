@@ -3,6 +3,7 @@ import {
   CreateUserDTO,
   UserResponseDTO,
   UpdateUserDTO,
+  UserAuthDTO,
 } from '@/application/dtos/User.dto';
 import { IUserRepository } from '@/domain/ports/User.repository';
 import { IPermissionRepository } from '@/domain/ports/Permission.repository';
@@ -37,5 +38,11 @@ export class UserService {
 
   async editUser(id: string, dto: UpdateUserDTO): Promise<UserResponseDTO> {
     return await this.userUseCase.updateUser(id, dto);
+  }
+
+  async authenticateUser(
+    dto: UserAuthDTO
+  ): Promise<Record<string, string | number>> {
+    return await this.userUseCase.authenticate(dto);
   }
 }

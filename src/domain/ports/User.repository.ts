@@ -6,4 +6,7 @@ export interface IUserRepository {
   findById(id: string): Promise<User | null>;
   findByEmail(email: string): Promise<User | null>;
   update(id: string, user: Partial<User>): Promise<User>;
+  authenticate(
+    user: Partial<User>
+  ): Promise<Record<string, string | number> | null>;
 }

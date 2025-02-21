@@ -27,4 +27,16 @@ const userResetPasswordSchema = z
   })
   .strict('Campo desconhecido inválido');
 
-export { userCreationSchema, userEditSchema, userResetPasswordSchema };
+const userAuthSchema = z
+  .object({
+    email: z.string().email(),
+    password: z.string(),
+  })
+  .strict('Campo desconhecido inválido');
+
+export {
+  userCreationSchema,
+  userEditSchema,
+  userResetPasswordSchema,
+  userAuthSchema,
+};

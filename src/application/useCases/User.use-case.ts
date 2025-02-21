@@ -4,6 +4,7 @@ import { IRoleRepository } from '@/domain/ports/Role.repository';
 import {
   CreateUserDTO,
   UpdateUserDTO,
+  UserAuthDTO,
   UserResponseDTO,
   toUserResponseDTO,
 } from '../dtos/User.dto';
@@ -119,16 +120,22 @@ export class UserUseCase {
   async getUserById(id: string): Promise<UserResponseDTO> {
     const user = await this.userRepository.findById(id);
     if (!user)
-      throw new Errors.MoleculerClientError(
-        'Registro não encontrado',
-        404,
-        'P2025'
-      );
+      throw new Errors.MoleculerClientError('Registro não encontrado', 404);
     return toUserResponseDTO(user);
   }
 
   async getAllUsers(): Promise<UserResponseDTO[]> {
     const users = await this.userRepository.getAll();
     return users.map(toUserResponseDTO);
+  }
+
+  async authenticate(
+    user: UserAuthDTO
+  ): Promise<Record<string, string | number>> {
+    const obj = await this.userRepository.authenticate(user);
+    if (!obj) {
+      throw new Errors.MoleculerClientError('Email ou senha incorretos', 401);
+    }
+    return obj;
   }
 }

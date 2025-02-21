@@ -7,12 +7,13 @@ import { UserService } from '@/services/User.service';
 import { RoleService } from '@/services/Role.service';
 import { StandardParameter } from './parameters';
 import { CreateRoleDTO } from '@/application/dtos/Role.dto';
-import { CreateUserDTO } from '@/application/dtos/User.dto';
+import { CreateUserDTO, UserAuthDTO } from '@/application/dtos/User.dto';
 import { PermissionResponseDTO } from '@/application/dtos/Permission.dto';
 import { errorHandler } from './errorHandler';
 import { uuidSchema } from '../schemas/Common.schema';
 import { roleCreationSchema, roleEditSchema } from '../schemas/Role.schema';
 import {
+  userAuthSchema,
   userCreationSchema,
   userEditSchema,
   userResetPasswordSchema,
@@ -144,6 +145,15 @@ const actions = {
       uuidSchema.parse(id);
       userResetPasswordSchema.parse(dto);
       return await userService.editUser(id, dto);
+    } catch (e) {
+      errorHandler(e as Error);
+    }
+  },
+
+  async authUser(ctx: Context<StandardParameter<UserAuthDTO>>) {
+    try {
+      userAuthSchema.parse(ctx.params);
+      return await userService.authenticateUser(ctx.params);
     } catch (e) {
       errorHandler(e as Error);
     }

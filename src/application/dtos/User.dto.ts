@@ -29,6 +29,11 @@ export interface UserResponseDTO {
   deletedAt?: Date;
 }
 
+export interface UserAuthDTO {
+  email: string;
+  password: string;
+}
+
 export function toUserResponseDTO(user: User): UserResponseDTO {
   return {
     id: user.id,
