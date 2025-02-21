@@ -150,13 +150,18 @@ const actions = {
     }
   },
 
-  async authUser(ctx: Context<StandardParameter<UserAuthDTO>>) {
-    try {
+  authUser: {
+    handler: async (ctx: Context<StandardParameter<UserAuthDTO>>) => {
       userAuthSchema.parse(ctx.params);
       return await userService.authenticateUser(ctx.params);
-    } catch (e) {
-      errorHandler(e as Error);
-    }
+    },
+    openapi: {
+      description: 'Autentica um usuário.',
+      params: {
+        email: 'string',
+        password: 'string',
+      },
+    },
   },
 };
 
