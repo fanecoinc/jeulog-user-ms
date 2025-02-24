@@ -32,135 +32,188 @@ const userService = new UserService(
 
 const actions = {
   // Permissions
-  async getPermissions(_ctx: Context) {
-    try {
-      return await permissionService.getAllPermissions();
-    } catch (e) {
-      errorHandler(e as Error);
-    }
+  getPermissions: {
+    handler: async (_ctx: Context) => {
+      return await permissionService.getAllPermissions().catch(errorHandler);
+    },
+    openapi: {
+      description: 'Recupera todas as permissões',
+      summary: 'Recupera todas as permissões',
+    },
   },
 
-  async getPermissionById(
-    ctx: Context<StandardParameter<PermissionResponseDTO>>
-  ) {
-    try {
+  getPermissionById: {
+    handler: async (ctx: Context<StandardParameter<PermissionResponseDTO>>) => {
       const { id } = ctx.params;
-      uuidSchema.parse(id);
-      return await permissionService.getPermissionById(id);
-    } catch (e) {
-      errorHandler(e as Error);
-    }
+      await uuidSchema.parseAsync(id).catch(errorHandler);
+      return await permissionService.getPermissionById(id).catch(errorHandler);
+    },
+    openapi: {
+      description: 'Recupera permissão pelo ID',
+      summary: 'Recupera permissão pelo ID',
+    },
   },
 
   // Roles
-  async getRoles(_ctx: Context) {
-    try {
-      return await roleService.getAllRoles();
-    } catch (e) {
-      errorHandler(e as Error);
-    }
+  getRoles: {
+    handler: async (_ctx: Context) => {
+      return await roleService.getAllRoles().catch(errorHandler);
+    },
+    openapi: {
+      description: 'Recupera todos os cargos',
+      summary: 'Recupera todos os cargos',
+    },
   },
 
-  async getRoleById(ctx: Context<StandardParameter<CreateRoleDTO>>) {
-    try {
+  getRoleById: {
+    handler: async (ctx: Context<StandardParameter<CreateRoleDTO>>) => {
       const { id } = ctx.params;
-      uuidSchema.parse(id);
-      return await roleService.getRoleById(id);
-    } catch (e) {
-      errorHandler(e as Error);
-    }
+      await uuidSchema.parseAsync(id).catch(errorHandler);
+      return await roleService.getRoleById(id).catch(errorHandler);
+    },
+    openapi: {
+      description: 'Recupera cargo pelo ID',
+      summary: 'Recupera cargo pelo ID',
+    },
   },
 
-  async createRole(ctx: Context<StandardParameter<CreateRoleDTO>>) {
-    try {
+  createRole: {
+    handler: async (ctx: Context<StandardParameter<CreateRoleDTO>>) => {
       const { name, permissionIds } = ctx.params;
       const dto = {
         name,
         permissionIds,
       };
-      roleCreationSchema.parse(dto);
-      return await roleService.createRole(dto);
-    } catch (e) {
-      errorHandler(e as Error);
-    }
+      await roleCreationSchema.parseAsync(dto).catch(errorHandler);
+      return await roleService.createRole(dto).catch(errorHandler);
+    },
+    openapi: {
+      description: 'Criação de cargo',
+      summary: 'Criação de cargo',
+    },
+    params: {
+      $$strict: 'remove',
+      name: { type: 'string', optional: false },
+      permissionIds: { type: 'array', items: 'string', optional: false },
+    },
   },
 
-  async editRole(ctx: Context<StandardParameter<CreateRoleDTO>>) {
-    try {
+  editRole: {
+    handler: async (ctx: Context<StandardParameter<CreateRoleDTO>>) => {
       const { name, permissionIds, id } = ctx.params;
-      uuidSchema.parse(id);
+      await uuidSchema.parseAsync(id).catch(errorHandler);
       const dto = {
         name,
         permissionIds,
       };
-      roleEditSchema.parse(dto);
-      return await roleService.editRole(id, dto);
-    } catch (e) {
-      errorHandler(e as Error);
-    }
+      await roleEditSchema.parseAsync(dto).catch(errorHandler);
+      return await roleService.editRole(id, dto).catch(errorHandler);
+    },
+    openapi: {
+      description: 'Edição de cargo',
+      summary: 'Edição de cargo',
+    },
+    params: {
+      $$strict: 'remove',
+      name: { type: 'string', optional: true },
+      permissionIds: { type: 'array', items: 'string', optional: true },
+    },
   },
 
   // Users
-  async getUsers(_ctx: Context) {
-    try {
-      return await userService.getAllUsers();
-    } catch (e) {
-      errorHandler(e as Error);
-    }
+  getUsers: {
+    handler: async (_ctx: Context) => {
+      return await userService.getAllUsers().catch(errorHandler);
+    },
+    openapi: {
+      description: 'Recupera todos os usuários',
+      summary: 'Recupera todos os usuários',
+    },
   },
 
-  async getUserById(ctx: Context<StandardParameter<CreateUserDTO>>) {
-    try {
+  getUserById: {
+    handler: async (ctx: Context<StandardParameter<CreateUserDTO>>) => {
       const { id } = ctx.params;
-      uuidSchema.parse(id);
-      return await userService.getUserById(id);
-    } catch (e) {
-      errorHandler(e as Error);
-    }
+      await uuidSchema.parseAsync(id).catch(errorHandler);
+      return await userService.getUserById(id).catch(errorHandler);
+    },
+    openapi: {
+      description: 'Recupera usuário pelo ID',
+      summary: 'Recupera usuário pelo ID',
+    },
   },
 
-  async createUser(ctx: Context<StandardParameter<CreateUserDTO>>) {
-    try {
-      userCreationSchema.parse(ctx.params);
-      return await userService.createUser(ctx.params);
-    } catch (e) {
-      errorHandler(e as Error);
-    }
+  createUser: {
+    handler: async (ctx: Context<StandardParameter<CreateUserDTO>>) => {
+      await userCreationSchema.parseAsync(ctx.params).catch(errorHandler);
+      return await userService.createUser(ctx.params).catch(errorHandler);
+    },
+    openapi: {
+      description: 'Criação de usuário',
+      summary: 'Criação de usuário',
+    },
+    params: {
+      $$strict: 'remove',
+      email: { type: 'string', optional: false },
+      password: { type: 'string', optional: false },
+      fullName: { type: 'string', optional: false },
+      roleId: { type: 'string', optional: false },
+      permissionIds: { type: 'array', items: 'string', optional: false },
+      active: { type: 'boolean', optional: false },
+    },
   },
 
-  async editUser(ctx: Context<StandardParameter<CreateUserDTO>>) {
-    try {
+  editUser: {
+    handler: async (ctx: Context<StandardParameter<CreateUserDTO>>) => {
       const { id, ...dto } = ctx.params;
-      uuidSchema.parse(id);
-      userEditSchema.parse(dto);
-      return await userService.editUser(id, dto);
-    } catch (e) {
-      errorHandler(e as Error);
-    }
+      await uuidSchema.parseAsync(id).catch(errorHandler);
+      await userEditSchema.parseAsync(dto).catch(errorHandler);
+      return await userService.editUser(id, dto).catch(errorHandler);
+    },
+    openapi: {
+      description: 'Edição de usuário',
+      summary: 'Edição de usuário',
+    },
+    params: {
+      $$strict: 'remove',
+      email: { type: 'string', optional: true },
+      fullName: { type: 'string', optional: true },
+      roleId: { type: 'string', optional: true },
+      permissionIds: { type: 'array', items: 'string', optional: true },
+      active: { type: 'boolean', optional: true },
+    },
   },
 
-  async resetPassword(ctx: Context<StandardParameter<CreateUserDTO>>) {
-    try {
+  resetPassword: {
+    handler: async (ctx: Context<StandardParameter<CreateUserDTO>>) => {
       const { id, ...dto } = ctx.params;
-      uuidSchema.parse(id);
-      userResetPasswordSchema.parse(dto);
-      return await userService.editUser(id, dto);
-    } catch (e) {
-      errorHandler(e as Error);
-    }
+      await uuidSchema.parseAsync(id).catch(errorHandler);
+      await userResetPasswordSchema.parseAsync(dto).catch(errorHandler);
+      return await userService.editUser(id, dto).catch(errorHandler);
+    },
+    openapi: {
+      description: 'Reseta a senha do usuário',
+      summary: 'Reseta a senha do usuário',
+    },
+    params: {
+      $$strict: 'remove',
+      password: 'string',
+    },
   },
 
   authUser: {
     handler: async (ctx: Context<StandardParameter<UserAuthDTO>>) => {
-      userAuthSchema.parse(ctx.params);
-      return await userService.authenticateUser(ctx.params);
+      await userAuthSchema.parseAsync(ctx.params).catch(errorHandler);
+      return await userService.authenticateUser(ctx.params).catch(errorHandler);
     },
     openapi: {
-      description: 'Autentica um usuário.',
-      params: {
-        email: 'string',
-        password: 'string',
-      },
+      description: 'Autentica um usuário',
+      summary: 'Autentica um usuário',
+    },
+    params: {
+      $$strict: 'remove',
+      email: 'string',
+      password: 'string',
     },
   },
 };
