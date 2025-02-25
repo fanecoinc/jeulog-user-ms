@@ -68,7 +68,6 @@ export const userActions = {
   editUser: {
     handler: async (ctx: Context<StandardParameter<CreateUserDTO>>) => {
       const { id, ...dto } = ctx.params;
-      console.log(ctx.params);
       await uuidSchema.parseAsync(id).catch(errorHandler);
       await userEditSchema.parseAsync(dto).catch(errorHandler);
       return await userService.editUser(id, dto).catch(errorHandler);
