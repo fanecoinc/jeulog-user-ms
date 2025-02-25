@@ -52,6 +52,7 @@ export function errorHandler(err: Error): never {
       'ZodValidationError',
       {
         cause: err.errors.map((e) => `${e.path.join('.')}: ${e.message}`),
+        summary: String(err),
       }
     );
   }

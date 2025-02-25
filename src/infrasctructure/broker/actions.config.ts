@@ -92,7 +92,6 @@ const actions = {
       summary: 'Criação de cargo',
     },
     params: {
-      $$strict: 'remove',
       name: { type: 'string', optional: false },
       permissionIds: { type: 'array', items: 'string', optional: false },
     },
@@ -114,7 +113,6 @@ const actions = {
       summary: 'Edição de cargo',
     },
     params: {
-      $$strict: 'remove',
       name: { type: 'string', optional: true },
       permissionIds: { type: 'array', items: 'string', optional: true },
     },
@@ -153,7 +151,6 @@ const actions = {
       summary: 'Criação de usuário',
     },
     params: {
-      $$strict: 'remove',
       email: { type: 'string', optional: false },
       password: { type: 'string', optional: false },
       fullName: { type: 'string', optional: false },
@@ -166,6 +163,7 @@ const actions = {
   editUser: {
     handler: async (ctx: Context<StandardParameter<CreateUserDTO>>) => {
       const { id, ...dto } = ctx.params;
+      console.log(ctx.params);
       await uuidSchema.parseAsync(id).catch(errorHandler);
       await userEditSchema.parseAsync(dto).catch(errorHandler);
       return await userService.editUser(id, dto).catch(errorHandler);
@@ -175,7 +173,6 @@ const actions = {
       summary: 'Edição de usuário',
     },
     params: {
-      $$strict: 'remove',
       email: { type: 'string', optional: true },
       fullName: { type: 'string', optional: true },
       roleId: { type: 'string', optional: true },
@@ -196,7 +193,6 @@ const actions = {
       summary: 'Reseta a senha do usuário',
     },
     params: {
-      $$strict: 'remove',
       password: 'string',
     },
   },
@@ -211,7 +207,6 @@ const actions = {
       summary: 'Autentica um usuário',
     },
     params: {
-      $$strict: 'remove',
       email: 'string',
       password: 'string',
     },

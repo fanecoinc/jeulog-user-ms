@@ -166,7 +166,19 @@ export class PrismaUserRepository implements IUserRepository {
   ): Promise<Record<string, string | number> | null> {
     const authUser = await prismaClient.user.findUnique({
       where: { email: user.email },
+      include: {
+        permissions: {
+          select: {
+            permission: {
+              select: {
+                code: true,
+              },
+            },
+          },
+        },
+      },
     });
+
     if (!authUser) {
       return null;
     }
@@ -180,9 +192,16 @@ export class PrismaUserRepository implements IUserRepository {
       return null;
     }
 
-    const { password, ...userData } = authUser;
+    let { password, permissions, ...userData }: any = authUser;
 
-    const token = jwt.sign({ user: userData }, JWT_SECRET, { expiresIn: '5h' });
+    permissions = authUser?.permissions.map((p) => p.permission.code) || [];
+    const token = jwt.sign(
+      { user: { data: userData, permissions: permissions } },
+      JWT_SECRET,
+      {
+        expiresIn: '5h',
+      }
+    );
 
     return {
       message: 'authenticated!',
