@@ -1,18 +1,18 @@
 import { Context } from 'moleculer';
 import { StandardParameter } from '../parameters';
 import { errorHandler } from '../errorHandler';
-import { uuidSchema } from '@/infrasctructure/schemas/Common.schema';
+import { uuidSchema } from '@/infrastructure/schemas/Common.schema';
 import {
   userAuthSchema,
   userCreationSchema,
   userEditSchema,
   userResetPasswordSchema,
-} from '@/infrasctructure/schemas/User.schema';
+} from '@/infrastructure/schemas/User.schema';
 import { CreateUserDTO, UserAuthDTO } from '@/application/dtos/User.dto';
 import { UserService } from '@/services/User.service';
-import { PrismaPermissionRepository } from '@/infrasctructure/adapters/Permission.prisma-adapter';
-import { PrismaUserRepository } from '@/infrasctructure/adapters/User.prisma-adapter';
-import { PrismaRoleRepository } from '@/infrasctructure/adapters/Role.prisma-adapter';
+import { PrismaPermissionRepository } from '@/infrastructure/adapters/Permission.prisma-adapter';
+import { PrismaUserRepository } from '@/infrastructure/adapters/User.prisma-adapter';
+import { PrismaRoleRepository } from '@/infrastructure/adapters/Role.prisma-adapter';
 
 const permissionRepository = new PrismaPermissionRepository();
 const roleRepository = new PrismaRoleRepository();

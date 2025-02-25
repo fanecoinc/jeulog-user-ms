@@ -194,7 +194,8 @@ export class PrismaUserRepository implements IUserRepository {
 
     let { password, permissions, ...userData }: any = authUser;
 
-    permissions = authUser?.permissions.map((p) => p.permission.code) || [];
+    permissions =
+      authUser?.permissions.map((p: any) => p.permission.code) || [];
     const token = jwt.sign(
       { user: { data: userData, permissions: permissions } },
       JWT_SECRET,

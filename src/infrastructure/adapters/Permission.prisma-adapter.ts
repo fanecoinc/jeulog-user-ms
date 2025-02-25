@@ -20,7 +20,7 @@ export class PrismaPermissionRepository implements IPermissionRepository {
 
   async getAll(): Promise<Permission[]> {
     const permissions = await prismaClient.permission.findMany();
-    return permissions.map((instance) => {
+    return permissions.map((instance: any) => {
       return new Permission(
         instance.id,
         instance.code,

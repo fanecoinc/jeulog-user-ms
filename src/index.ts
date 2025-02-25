@@ -1,5 +1,5 @@
-import broker from './infrasctructure/broker/service-broker';
-import executeSeeds from './infrasctructure/database/seeds/executeSeeds';
+import broker from './infrastructure/broker/service-broker';
+import executeSeeds from './infrastructure/database/seeds/executeSeeds';
 import dotenv from 'dotenv';
 import path from 'path';
 

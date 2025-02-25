@@ -1,10 +1,10 @@
 import { Context } from 'moleculer';
-import { PrismaPermissionRepository } from '@/infrasctructure/adapters/Permission.prisma-adapter';
+import { PrismaPermissionRepository } from '@/infrastructure/adapters/Permission.prisma-adapter';
 import { PermissionService } from '@/services/Permission.service';
 import { StandardParameter } from '../parameters';
 import { PermissionResponseDTO } from '@/application/dtos/Permission.dto';
 import { errorHandler } from '../errorHandler';
-import { uuidSchema } from '@/infrasctructure/schemas/Common.schema';
+import { uuidSchema } from '@/infrastructure/schemas/Common.schema';
 
 const permissionRepository = new PrismaPermissionRepository();
 const permissionService = new PermissionService(permissionRepository);

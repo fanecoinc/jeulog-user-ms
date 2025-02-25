@@ -15,12 +15,12 @@ export class PrismaRoleRepository implements IRoleRepository {
       },
     });
 
-    return roles.map((instance) => {
+    return roles.map((instance: any) => {
       return new Role(
         instance.id,
         instance.name,
         instance.createdAt,
-        instance.permissions.map((p) => {
+        instance.permissions.map((p: any) => {
           return new Permission(
             p.permission.id,
             p.permission.code,
@@ -61,7 +61,7 @@ export class PrismaRoleRepository implements IRoleRepository {
       createdRole.id,
       createdRole.name,
       createdRole.createdAt,
-      createdRole.permissions.map((p) => {
+      createdRole.permissions.map((p: any) => {
         return new Permission(
           p.permission.id,
           p.permission.code,
@@ -93,7 +93,7 @@ export class PrismaRoleRepository implements IRoleRepository {
       role.id,
       role.name,
       role.createdAt,
-      role.permissions.map((p) => {
+      role.permissions.map((p: any) => {
         return new Permission(
           p.permission.id,
           p.permission.code,
@@ -146,7 +146,7 @@ export class PrismaRoleRepository implements IRoleRepository {
       updatedRole.id,
       updatedRole.name,
       updatedRole.createdAt,
-      updatedRole.permissions.map((p) => {
+      updatedRole.permissions.map((p: any) => {
         return new Permission(
           p.permission.id,
           p.permission.code,

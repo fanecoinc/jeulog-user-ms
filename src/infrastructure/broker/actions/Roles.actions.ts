@@ -1,15 +1,15 @@
 import { Context } from 'moleculer';
 import { StandardParameter } from '../parameters';
 import { errorHandler } from '../errorHandler';
-import { uuidSchema } from '@/infrasctructure/schemas/Common.schema';
+import { uuidSchema } from '@/infrastructure/schemas/Common.schema';
 import {
   roleCreationSchema,
   roleEditSchema,
-} from '@/infrasctructure/schemas/Role.schema';
+} from '@/infrastructure/schemas/Role.schema';
 import { CreateRoleDTO } from '@/application/dtos/Role.dto';
 import { RoleService } from '@/services/Role.service';
-import { PrismaRoleRepository } from '@/infrasctructure/adapters/Role.prisma-adapter';
-import { PrismaPermissionRepository } from '@/infrasctructure/adapters/Permission.prisma-adapter';
+import { PrismaRoleRepository } from '@/infrastructure/adapters/Role.prisma-adapter';
+import { PrismaPermissionRepository } from '@/infrastructure/adapters/Permission.prisma-adapter';
 
 const roleRepository = new PrismaRoleRepository();
 const permissionRepository = new PrismaPermissionRepository();
