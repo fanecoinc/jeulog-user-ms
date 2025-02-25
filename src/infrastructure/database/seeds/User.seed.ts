@@ -7,10 +7,6 @@ export async function userSeed(): Promise<void> {
       where: { email: process.env.ADMIN_EMAIL },
     });
 
-    if (adminUser) {
-      return;
-    }
-
     const adminRole = await prismaClient.role.findUnique({
       where: { name: 'Admin' },
       include: {
@@ -27,6 +23,42 @@ export async function userSeed(): Promise<void> {
     }
 
     const allPermissions = await prismaClient.permission.findMany();
+
+    if (adminUser) {
+      const [_userAfterReset, _updatedUser] = await prismaClient.$transaction([
+        prismaClient.user.update({
+          where: { id: adminUser.id },
+          data: {
+            permissions: {
+              deleteMany: {},
+            },
+          },
+        }),
+
+        prismaClient.user.update({
+          where: { id: adminUser.id },
+          data: {
+            updatedAt: new Date(),
+            permissions: allPermissions
+              ? {
+                  create: allPermissions.map((p) => ({
+                    permission: { connect: { id: p.id } },
+                  })),
+                }
+              : undefined,
+          },
+          include: {
+            permissions: {
+              include: {
+                permission: true,
+              },
+            },
+          },
+        }),
+      ]);
+
+      return;
+    }
 
     const data = {
       id: uuidv4(),

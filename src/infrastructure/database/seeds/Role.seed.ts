@@ -6,11 +6,43 @@ export async function roleSeed(): Promise<void> {
     where: { name: 'Admin' },
   });
 
+  const allPermissions = await prismaClient.permission.findMany();
+
   if (adminRole) {
+    const [_roleAfterReset, _updatedRole] = await prismaClient.$transaction([
+      prismaClient.role.update({
+        where: { id: adminRole.id },
+        data: {
+          permissions: {
+            deleteMany: {},
+          },
+        },
+      }),
+
+      prismaClient.role.update({
+        where: { id: adminRole.id },
+        data: {
+          updatedAt: new Date(),
+          permissions: allPermissions
+            ? {
+                create: allPermissions.map((p) => ({
+                  permission: { connect: { id: p.id } },
+                })),
+              }
+            : undefined,
+        },
+        include: {
+          permissions: {
+            include: {
+              permission: true,
+            },
+          },
+        },
+      }),
+    ]);
+
     return;
   }
-
-  const allPermissions = await prismaClient.permission.findMany();
 
   const data = {
     id: uuidv4(),

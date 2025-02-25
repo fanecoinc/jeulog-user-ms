@@ -61,7 +61,7 @@ export const userActions = {
       fullName: { type: 'string', optional: false },
       roleId: { type: 'string', optional: false },
       permissionIds: { type: 'array', items: 'string', optional: false },
-      active: { type: 'boolean', optional: false },
+      active: { type: 'boolean', optional: true },
     },
   },
 
