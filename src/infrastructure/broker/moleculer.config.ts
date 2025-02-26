@@ -11,6 +11,7 @@ const brokerOptions: BrokerOptions = {
     delay: 2000,
   },
   cacher: 'Memory',
+  validator: false,
 };
 
 export default brokerOptions;
