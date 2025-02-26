@@ -5,9 +5,9 @@ enum Permissions {
   B1 = 'Visualização de cargos',
   B2 = 'Criação de cargos',
   B3 = 'Edição de cargos',
-  C1 = 'Visualização de clientes',
-  C2 = 'Criação de clientes',
-  C3 = 'Edição de clientes',
+  C1 = 'Visualização de pessoas',
+  C2 = 'Criação de pessoas',
+  C3 = 'Edição de pessoas',
 }
 
 export { Permissions };
