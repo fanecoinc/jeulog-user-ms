@@ -25,17 +25,18 @@ export class PrismaUserRepository implements IUserRepository {
         instance.role.updatedAt ?? undefined,
         instance.role.deletedAt ?? undefined
       ),
-      instance.permissions.map(
-        (p: any) =>
-          new Permission(
-            p.permission.id,
-            p.permission.code,
-            p.permission.name,
-            p.permission.createdAt,
-            p.permission.updatedAt ?? undefined,
-            p.permission.deletedAt ?? undefined
-          )
-      ),
+      instance.permissions
+        ? instance.permissions.map((p: any) => {
+            return new Permission(
+              p.permission.id,
+              p.permission.code,
+              p.permission.name,
+              p.permission.createdAt,
+              p.permission.updatedAt ?? undefined,
+              p.permission.deletedAt ?? undefined
+            );
+          })
+        : [],
       instance.updatedAt ?? undefined,
       instance.deletedAt ?? undefined
     );
