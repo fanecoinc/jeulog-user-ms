@@ -8,6 +8,9 @@ enum Permissions {
   C1 = 'Visualização de pessoas',
   C2 = 'Criação de pessoas',
   C3 = 'Edição de pessoas',
+  D1 = 'Visualização de frota',
+  D2 = 'Criação de frota',
+  D3 = 'Edição de frota',
 }
 
 export { Permissions };
