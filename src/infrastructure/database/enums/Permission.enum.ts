@@ -11,6 +11,9 @@ enum Permissions {
   D1 = 'Visualização de frota',
   D2 = 'Criação de frota',
   D3 = 'Edição de frota',
+  E1 = 'Visualização de conjuntos',
+  E2 = 'Criação de conjuntos',
+  E3 = 'Edição de conjuntos',
 }
 
 export { Permissions };
