@@ -14,17 +14,20 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/fanecoinc/jeulog-user-ms/issues"
   },
   "homepage": "https://github.com/fanecoinc/jeulog-user-ms#readme",
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/fs-extra": "^11.0.4",
     "@types/jsonwebtoken": "^9.0.8",
-    "@types/node": "^22.13.1",
+    "fs-extra": "^11.3.1",
     "nodemon": "^3.1.9",
-    "prettier": "3.5.1"
+    "prettier": "3.5.1",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.2.4"
   },
   "dependencies": {
     "@prisma/client": "^6.3.1",
