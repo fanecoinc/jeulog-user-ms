@@ -11,20 +11,22 @@ export async function permissionSeed(): Promise<void> {
     name,
   }));
 
-  permissions.forEach(async (obj) => {
-    const existingPermission = await prismaClient.permission.findUnique({
-      where: { code: obj.code },
-    });
+  await Promise.all(
+    permissions.map(async (obj) => {
+      const existingPermission = await prismaClient.permission.findUnique({
+        where: { code: obj.code },
+      });
 
-    if (!existingPermission) {
-      const data: Prisma.PermissionCreateInput = {
-        id: uuidv4(),
-        name: obj.name,
-        code: obj.code,
-        createdAt: new Date(),
-      };
+      if (!existingPermission) {
+        const data: Prisma.PermissionCreateInput = {
+          id: uuidv4(),
+          name: obj.name,
+          code: obj.code,
+          createdAt: new Date(),
+        };
 
-      await prismaClient.permission.create({ data });
-    }
-  });
+        await prismaClient.permission.create({ data });
+      }
+    })
+  );
 }

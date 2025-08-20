@@ -10,11 +10,6 @@ const testDbPath = path.resolve(
   '../infrastructure/database/prisma/schema/test.db'
 );
 
-const testDbJournalPath = path.resolve(
-  __dirname,
-  '../infrastructure/database/prisma/schema/test.db-journal'
-);
-
 const schemaPath = path.resolve(
   __dirname,
   '../infrastructure/database/prisma/schema/schema.prisma'
@@ -32,13 +27,10 @@ const migrationsTemp = path.resolve(
 
 try {
   if (fs.existsSync(testDbPath)) {
-    fs.unlinkSync(testDbPath);
+    fs.removeSync(testDbPath);
   }
 
-  if (fs.existsSync(testDbJournalPath)) {
-    fs.unlinkSync(testDbJournalPath);
-  }
-
+  fs.ensureDirSync(migrationsTemp);
   fs.copySync(migrationsSource, migrationsTemp);
 
   execSync(`npx prisma migrate deploy --schema=${schemaPath}`, {
