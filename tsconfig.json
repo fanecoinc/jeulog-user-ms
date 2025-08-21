@@ -10,8 +10,8 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "types": ["vitest/globals"]
+    "types": ["jest"]
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/tests/teardown.js", "src/tests/setup.js"],
   "exclude": ["node_modules"]
 }
