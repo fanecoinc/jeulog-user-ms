@@ -6,6 +6,7 @@ import { User } from '@/domain/entities/User';
 import bcrypt from 'bcrypt';
 import { JWT_SECRET } from '../database/config';
 import jwt from 'jsonwebtoken';
+import { Errors } from 'moleculer';
 
 export class PrismaUserRepository implements IUserRepository {
   private mapToUserEntity(instance: Record<string, any>): User {
@@ -121,6 +122,13 @@ export class PrismaUserRepository implements IUserRepository {
   }
 
   async update(id: string, user: Partial<User>): Promise<User> {
+    const existingUser = await this.findById(id);
+    if (!existingUser)
+      throw new Errors.MoleculerClientError(
+        'Registro não encontrado',
+        404,
+        'P2025'
+      );
     const [_userAfterReset, updatedUser] = await prismaClient.$transaction([
       prismaClient.user.update({
         where: { id },
@@ -134,11 +142,11 @@ export class PrismaUserRepository implements IUserRepository {
       prismaClient.user.update({
         where: { id },
         data: {
-          email: user.email,
-          fullName: user.fullName,
-          password: user.password,
-          active: user.active,
-          roleId: user.roleId,
+          email: user.email ?? existingUser.email,
+          fullName: user.fullName ?? existingUser.fullName,
+          password: user.password ?? existingUser.password,
+          active: user.active ?? existingUser.active,
+          roleId: user.roleId ?? existingUser.roleId,
           updatedAt: new Date(),
           permissions: user.permissions
             ? {

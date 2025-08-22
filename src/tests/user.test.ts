@@ -67,6 +67,8 @@ describe('User Service E2E Tests', () => {
     expect(editedUser).toBeDefined();
     expect(editedUser.id).toBe(userId);
     expect(editedUser.email).toBe(updatedUser.email);
+    expect(editedUser.role?.id).toBe(users[0].role?.id);
+    expect(editedUser.active).toBe(users[0].active);
   });
 
   it('should reset user password', async () => {
